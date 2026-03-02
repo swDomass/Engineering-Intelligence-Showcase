@@ -5,138 +5,181 @@ import plotly.express as px
 import plotly.graph_objects as go
 import time
 
-# --- PAGE CONFIG & THEME ---
-st.set_page_config(page_title="Engineering Intelligence Showcase", page_icon="🚀", layout="wide")
+# --- PAGE CONFIG ---
+st.set_page_config(page_title="Linked Engineering | Showcase", page_icon="⚙️", layout="wide")
 
-# --- CUSTOM CSS (Surgical Injection) ---
+# --- CUSTOM CSS (Linked Engineering Blueprint Fusion) ---
 st.markdown("""
     <style>
-    /* Card design for metrics */
-    [data-testid="stMetricValue"] {
-        font-family: 'Courier New', Courier, monospace;
-        color: #00FFAA;
-    }
+    /* Blueprint Background Pattern */
     .stApp {
-        background-color: #0E1117;
+        background-color: #0d1117;
+        background-image: 
+            linear-gradient(rgba(108, 175, 43, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(108, 175, 43, 0.05) 1px, transparent 1px);
+        background-size: 50px 50px;
     }
+
+    /* Brand Typography */
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=JetBrains+Mono&display=swap');
+    
+    html, body, [class*="css"] {
+        font-family: 'Space Grotesk', sans-serif;
+        color: #c9d1d9;
+    }
+
+    /* Header & Logos */
+    [data-testid="stHeader"] {
+        background: rgba(13, 17, 23, 0.95);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid #30363d;
+    }
+
+    /* Technical Style for Metrics */
+    [data-testid="stMetricValue"] {
+        font-family: 'JetBrains Mono', monospace;
+        color: #6caf2b;
+        font-size: 2rem !important;
+    }
+
+    /* Modern Tabs Styling */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 10px;
-        background-color: #1A1C24;
-        padding: 5px;
-        border-radius: 10px;
+        gap: 8px;
+        background-color: rgba(10, 22, 40, 0.8);
+        padding: 8px;
+        border-radius: 12px;
+        border: 1px solid #30363d;
     }
     .stTabs [data-baseweb="tab"] {
-        border-radius: 5px;
-        padding: 5px 20px;
-        color: #E0E0E0;
+        border-radius: 6px;
+        padding: 8px 24px;
+        color: #8b949e;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.85rem;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #00FFAA;
-        color: #0E1117;
-    }
-    div.stButton > button:first-child {
-        background-color: #00FFAA;
-        color: #0E1117;
-        border-radius: 8px;
+        background-color: #6caf2b;
+        color: #0d1117 !important;
         font-weight: bold;
+    }
+
+    /* Buttons (Blueprint Style) */
+    div.stButton > button:first-child {
+        background-color: #6caf2b;
+        color: #010409;
+        border: none;
+        border-radius: 8px;
+        font-weight: 700;
+        padding: 0.6rem 2rem;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    div.stButton > button:first-child:hover {
+        background-color: #5a9624;
+        box-shadow: 0 0 20px rgba(108, 175, 43, 0.3);
+    }
+
+    /* Cards / Containers */
+    .stAlert {
+        background-color: rgba(10, 22, 40, 0.6);
+        border: 1px solid #30363d;
+        border-left: 5px solid #6caf2b;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# --- HEADER ---
-st.title("Engineering Intelligence Showcase 🚀")
-st.markdown("*Bridging Deep Engineering with AI & Automation*")
+# --- HEADER SECTION ---
+col_logo, col_title = st.columns([1, 4])
+with col_title:
+    st.title("Linked Engineering Intelligence")
+    st.markdown("*Showcase Dashboard | Specialized in Engineering-Python & AI Automation*")
+
 st.divider()
 
-# --- TABS LAYOUT (Modern Dashboard) ---
+# --- DASHBOARD TABS ---
 tab_home, tab_ai, tab_eeg, tab_signal, tab_sales = st.tabs([
-    "🏠 Home", "🤖 AI Orchestrator", "🧠 EEG Analysis", "⚙️ Signal Processing", "📈 Sales AI"
+    "01_OVERVIEW", "02_AI_ORCHESTRATOR", "03_EEG_DATA", "04_SIGNAL_PROC", "05_SALES_AI"
 ])
 
-# --- HOME TAB ---
+# --- TAB: HOME ---
 with tab_home:
-    col1, col2 = st.columns([2, 1])
-    with col1:
+    col_l, col_r = st.columns([3, 2])
+    with col_l:
         st.markdown("""
-        ### Vision & Expertise
-        Als **Maschinenbau-Ingenieur** und **Python-Entwickler** löse ich technische Herausforderungen durch:
-        - **Modellbildung & Simulation** (Vibrationen, Statik)
-        - **KI-gestützte Automatisierung** (Agenten, LLMs)
-        - **Wissenschaftliche Datenanalyse** (Wellenformen, Zeitreihen)
+        ### Blueprint: Professional Engineering Solutions
+        Als **Mechanical Engineer** kombiniere ich Domänenwissen aus dem Maschinenbau mit moderner Software-Entwicklung.
+        
+        #### Fokusbereiche:
+        - **Automatisierte Auswertung** von Zeitrohdaten (Campbell, NVH)
+        - **Intelligente Agenten-Steuerung** für komplexe Engineering-Workflows
+        - **Datengetriebene Prozessoptimierung** im KMU-Bereich
         """)
-        st.info("💡 Wählen Sie die Tabs oben aus, um Live-Demos meiner Engineering-Lösungen zu sehen.")
+        st.info("⚡ Live-Interaktion in den technischen Modul-Tabs möglich.")
     
-    with col2:
-        st.metric("Abgeschlossene Projekte", "15+", delta="3")
-        st.metric("KI-Automatisierung", "85%", delta="10%")
+    with col_r:
+        st.metric("Tech-Stack Projects", "15+", delta="3 (Q1)")
+        st.metric("Automation Rate", "85%", delta="+10%")
 
-# --- AI ORCHESTRATOR TAB ---
+# --- TAB: AI ORCHESTRATOR ---
 with tab_ai:
-    st.subheader("🤖 AI Orchestrator: Autonome Task-Steuerung")
-    st.write("Verwaltung und Verteilung von Aufgaben an Claude 3.5 Sonnet, Gemini 1.5 Pro und Codex.")
+    st.subheader("🤖 Autonomous Task Orchestration")
+    st.write("Verwaltung und Verteilung von Tasks an Claude, Gemini und Codex via Multi-Agent-Routing.")
     
-    if st.button("Simulation: Task-Queue abarbeiten"):
+    if st.button("RUN PIPELINE"):
         progress_bar = st.progress(0)
         status_text = st.empty()
-        
-        tasks = [
-            "Reviewing CFD Code (CWD: D:/Sim/v1)", 
-            "Generating Unittest Case", 
-            "Updating Roadmap.md", 
-            "Refactoring Material Module"
-        ]
+        tasks = ["Checking FEA Code", "Generating Report", "Syncing Database", "Updating Documentation"]
         for i, task in enumerate(tasks):
-            status_text.text(f"🚀 {task} via AI Agent...")
-            time.sleep(1.2)
+            status_text.code(f"EXECUTE: {task}...")
+            time.sleep(1)
             progress_bar.progress((i + 1) / len(tasks))
-        
-        st.success("✅ Workflow autonom beendet!")
-        st.balloons()
+        st.success("PIPELINE COMPLETED SUCCESSFULLY")
 
-# --- EEG ANALYSIS TAB ---
+# --- TAB: EEG ---
 with tab_eeg:
-    st.subheader("🧠 EEG Analysis Suite (MedTech)")
-    st.write("Wissenschaftliche Aufbereitung von Gehirnstrom-Rohdaten.")
+    st.subheader("🧠 EEG Neural Data Processing")
+    st.write("Wissenschaftliche Aufbereitung neurologischer Zeitreihen-Daten.")
     
     t = np.linspace(0, 2, 1000)
-    alpha = np.sin(2 * np.pi * 10 * t) * 20
-    noise = np.random.normal(0, 5, 1000)
-    signal = alpha + noise
+    signal = np.sin(2 * np.pi * 10 * t) * 20 + np.random.normal(0, 5, 1000)
     
-    fig = px.line(x=t, y=signal, labels={'x': 'Zeit (s)', 'y': 'Amplitude (µV)'}, 
-                 title="EEG Signal (Digitaler Zwilling)", color_discrete_sequence=['#00FFAA'])
-    fig.update_layout(template="plotly_dark")
+    fig = px.line(x=t, y=signal, labels={'x': 'TIME [S]', 'y': 'AMPLITUDE [µV]'}, 
+                 title="SIGNAL STREAM: PROCESSED DATA")
+    fig.update_layout(template="plotly_dark", plot_bgcolor='rgba(0,0,0,0)', paper_bgcolor='rgba(0,0,0,0)', 
+                     font_family="JetBrains Mono", font_color="#6caf2b")
     st.plotly_chart(fig, use_container_width=True)
 
-# --- SIGNAL PROCESSING TAB ---
+# --- TAB: SIGNAL PROCESSING ---
 with tab_signal:
-    st.subheader("⚙️ Engineering Signal Processing")
-    st.write("Automatische Transformation: Zeitrohdaten zu Campbell-Diagrammen.")
+    st.subheader("⚙️ NVH Signal Processing")
+    st.write("Transformation von Zeitrohdaten zu Campbell-Diagrammen für Schwingungsanalysen.")
     
     speeds = np.linspace(500, 5000, 50)
     freqs = np.linspace(0, 1000, 100)
     z = np.random.rand(100, 50)
     
-    fig = go.Figure(data=go.Heatmap(z=z, x=speeds, y=freqs, colorscale='Viridis'))
-    fig.update_layout(title="Campbell Diagramm (NVH Simulation)", template="plotly_dark")
+    fig = go.Figure(data=go.Heatmap(z=z, x=speeds, y=freqs, colorscale='Greens'))
+    fig.update_layout(title="CAMPBELL DIAGRAM: SPECTRAL ANALYSIS", template="plotly_dark",
+                     paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_family="JetBrains Mono")
     st.plotly_chart(fig, use_container_width=True)
 
-# --- SALES AI TAB ---
+# --- TAB: SALES AI ---
 with tab_sales:
-    st.subheader("📈 Linked Engineering Sales AI")
-    st.write("Lead-Generierung durch lokales LLM-Parsing.")
+    st.subheader("📊 Sales Pipeline Automation")
+    st.write("KI-basiertes Lead-Mining und CRM-Steuerung für Linked Engineering.")
     
-    data = {'KW': ['05', '06', '07', '08'], 'Leads': [45, 82, 63, 110], 'Relevanz': [12, 28, 15, 42]}
+    data = {'KW': ['05', '06', '07', '08'], 'Leads': [45, 82, 63, 110], 'Relevance': [12, 28, 15, 42]}
     df = pd.DataFrame(data)
     
-    fig = px.bar(df, x='KW', y=['Leads', 'Relevanz'], barmode='group', 
-                 title="Performance: KI-Vertriebs-Pipeline", color_discrete_map={'Leads': '#4A4E69', 'Relevanz': '#00FFAA'})
-    fig.update_layout(template="plotly_dark")
+    fig = px.bar(df, x='KW', y=['Leads', 'Relevance'], barmode='group', 
+                 title="PERFORMANCE: SALES AGENT", color_discrete_map={'Leads': '#30363d', 'Relevance': '#6caf2b'})
+    fig.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_family="JetBrains Mono")
     st.plotly_chart(fig, use_container_width=True)
 
-# --- FOOTER ---
+# --- FOOTER & CONTACT ---
 st.divider()
-st.sidebar.markdown("### Status & Kontakt")
-st.sidebar.markdown("✅ **Portfolio: LIVE**")
-st.sidebar.markdown("📧 **Kontakt:** https://www.linkedin.com/in/dominik-f-840ab919a/")
-
+st.sidebar.markdown("### 🌐 NETWORK")
+st.sidebar.markdown("🔗 **[LinkedIn Profile](https://www.linkedin.com/in/dominik-f-840ab919a/)**")
+st.sidebar.markdown("---")
+st.sidebar.caption("© 2026 Linked Engineering Showcase Dashboard")
