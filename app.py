@@ -138,4 +138,5 @@ with tab_sales:
 st.divider()
 st.sidebar.markdown("### Status & Kontakt")
 st.sidebar.markdown("✅ **Portfolio: LIVE**")
-st.sidebar.markdown("📧 **Kontakt:** [Dein LinkedIn]")
+st.sidebar.markdown("📧 **Kontakt:** https://www.linkedin.com/in/dominik-f-840ab919a/")
+

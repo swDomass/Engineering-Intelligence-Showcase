@@ -50,4 +50,5 @@ I focus on **efficient, maintainable code** that delivers **measurable business 
 *   **Status:** Available for freelance projects in Python automation, AI integration, and technical data analysis.
 *   **Access:** These projects contain proprietary IP and are kept in private repositories. **Code access for specific modules can be granted upon request** after an initial consultation.
 
-📧 **Contact:** [Your Email / LinkedIn Profile]
+📧 **Contact:** https://www.linkedin.com/in/dominik-f-840ab919a/
+
