@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import plotly.graph_objects as go
 import time
 
 from ui_shared import init_page, render_demo_notice, render_header, render_sidebar

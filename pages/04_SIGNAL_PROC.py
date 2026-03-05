@@ -1,7 +1,5 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
-import plotly.express as px
 import plotly.graph_objects as go
 import time
 
@@ -136,10 +134,22 @@ with col_cut1:
     )
     st.plotly_chart(fig_order, use_container_width=True)
 
+order_csv_rows = ["RPM,Order2.0,Order4.0"]
+order_csv_rows.extend(
+    f"{rpm},{order2:.6f},{order4:.6f}"
+    for rpm, order2, order4 in zip(rpm_range, order_2, order_4)
+)
+order_csv_data = "\n".join(order_csv_rows)
+
 with col_cut2:
     st.info("**ANALYSE:** Die 2. Motorordnung zeigt eine ausgeprägte Resonanz bei ca. 3.250 RPM. Dies deutet auf eine Kopplung mit der ersten Biegeeigenform des Kranauslegers hin.")
     st.write("🛠️ **Export Options:**")
-    st.download_button("DOWNLOAD CSV (ORDER DATA)", "RPM;Order2.0;Order4.0\n500;0.1;0.05...", file_name="orders.csv")
+    st.download_button(
+        "DOWNLOAD CSV (ORDER DATA)",
+        order_csv_data,
+        file_name="orders.csv",
+        mime="text/csv",
+    )
     st.button("GENERATE .FEM (RLOAD)", help="Erstellt eine Hypermesh-kompatible Datei")
 
 if st.button("RUN SIGNAL PIPELINE (MOCK)"):

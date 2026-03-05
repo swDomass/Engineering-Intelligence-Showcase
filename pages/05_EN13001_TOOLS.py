@@ -1,11 +1,17 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 import time
 
 from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
+
+MATERIAL_YIELD_STRENGTHS = {
+    "S235": 235,
+    "S355": 355,
+    "S460": 460,
+    "S690": 690,
+}
 
 init_page()
 render_header()
@@ -100,13 +106,14 @@ with col_calc2:
     st.write("**Echtzeit-Validierung (Norm-Logik):**")
     
     # Simple Calculation Logic Mockup based on EN13001-3-1
-    f_yd = 355 if material == "S355" else 235
+    f_yd = MATERIAL_YIELD_STRENGTHS.get(material, 235)
     # alpha_w calculation mock (Table 8 simplification)
     alpha_w = 0.9 if weld_quality == "Gruppe C (High)" else 0.6
     
     # Combined stress (Eq. 29)
     sigma_v = np.sqrt(stress_sigma**2 + 3 * stress_tau**2)
-    utilization = (sigma_v / (f_yd * alpha_w)) * 100
+    allowable_stress = f_yd * alpha_w
+    utilization = (sigma_v / allowable_stress) * 100 if allowable_stress > 0 else 0.0
     
     # Visualizing Utilization
     fig_gauge = go.Figure(go.Indicator(
@@ -136,9 +143,11 @@ with col_calc2:
     st.plotly_chart(fig_gauge, use_container_width=True)
     
     if utilization > 100:
-        st.error(f"⚠️ **NACHWEIS NICHT ERFÜLLT!** Kombinierte Spannung ({sigma_v:.1f} MPa) überschreitet Grenzspannung ({f_yd*alpha_w:.1f} MPa).")
+        st.error(f"⚠️ **NACHWEIS NICHT ERFÜLLT!** Kombinierte Spannung ({sigma_v:.1f} MPa) überschreitet Grenzspannung ({allowable_stress:.1f} MPa).")
+    elif utilization == 0:
+        st.success("✅ **NACHWEIS ERFÜLLT.** Ausnutzung: 0.0%. Sicherheitsfaktor: ∞ (keine Last).")
     else:
-        st.success(f"✅ **NACHWEIS ERFÜLLT.** Ausnutzung: {utilization:.1f}%. Sicherheitsfaktor: {(100/utilization):.2f}")
+        st.success(f"✅ **NACHWEIS ERFÜLLT.** Ausnutzung: {utilization:.1f}%. Sicherheitsfaktor: {(100 / utilization):.2f}")
 
 # -- Technical Deep Dive: Hot-Spot Method --
 st.write("🔬 **Technical Focus: Hot-Spot Fatigue Analysis (IIW)**")
