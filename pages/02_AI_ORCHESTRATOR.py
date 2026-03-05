@@ -51,16 +51,20 @@ st.divider()
 # -- Visual Analytics (Mocked from real Engine Data) --
 col_left, col_right = st.columns([3, 2])
 
-with col_left:
-    st.write("📈 **Provider Capacity (Last 24h)**")
-    # Mocking timeline data for capacity
-    times = pd.date_range(end=pd.Timestamp.now(), periods=24, freq='H')
-    capacity_data = pd.DataFrame({
+@st.cache_data
+def _build_capacity_data():
+    np.random.seed(7)
+    times = pd.date_range(end="2026-03-05 08:00", periods=24, freq='H')
+    return pd.DataFrame({
         'Time': times,
         'Claude': 60 + 30 * np.sin(np.linspace(0, 3, 24)) + np.random.normal(0, 5, 24),
         'Gemini': 80 + 10 * np.cos(np.linspace(0, 3, 24)) + np.random.normal(0, 3, 24),
-        'Codex': np.random.uniform(90, 100, 24)
+        'Codex': np.random.uniform(90, 100, 24),
     })
+
+with col_left:
+    st.write("📈 **Provider Capacity (Last 24h)**")
+    capacity_data = _build_capacity_data()
     fig_cap = px.line(capacity_data, x='Time', y=['Claude', 'Gemini', 'Codex'],
                      labels={'value': 'REMAINING %', 'Time': 'TIME (UTC)'},
                      color_discrete_map={'Claude': COLOR_PRIMARY, 'Gemini': COLOR_BORDER, 'Codex': COLOR_TEXT})
