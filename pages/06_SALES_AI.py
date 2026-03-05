@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import time
 
-from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
+from ui_shared import COLOR_PRIMARY, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
 init_page()
 render_header()
@@ -47,7 +47,20 @@ st.divider()
 
 # -- Visualizing the Two-Stage Pipeline --
 st.write("🔄 **Two-Stage Intelligence Pipeline**")
-st.image("https://mermaid.ink/svg/pako:eNptkE1LxEAQhv_KMGcv_QPePCh4U_Ag6MWLh8W0O7Wp6SSTTbeI-N-dtatV8Obh9XnfZ0Y75S6N0mI9fK-K8hZ8m0u9n29E0b7TfO500vK4V4eT0Yre-9Bq432-8kXpQ_FkRre8N8bYI78XvTf-zK8f9Wf-eAof6Vv-eA4f6W_58zl8pA_k98I_5I_X8JF-Iu8X_jE_vYWP9At5v_D3-eM9fKS_vL--P89yK_OllVpU7i-N0vA0", caption="Logic: Fast Filter -> Deep Enrichment -> Final Score", use_container_width=False)
+pipe_cols = st.columns(5)
+pipe_steps = [
+    ("📥 Input", "RSS · Gmail · Portal", False),
+    ("⚡ Fast Filter", "Regex Score", False),
+    ("🔍 URL Enrichment", "Promising leads only", False),
+    ("🧠 LLM Deep Score", "Full-text analysis", False),
+    ("✅ CRM Import", "High-score leads", True),
+]
+for col, (title, desc, is_final) in zip(pipe_cols, pipe_steps):
+    with col:
+        if is_final:
+            st.success(f"**{title}**\\n{desc}")
+        else:
+            st.info(f"**{title}**\\n{desc}")
 
 # -- Lead Detail Example Card --
 st.write("📝 **Example: AI-Enriched Lead Detail**")
@@ -86,7 +99,7 @@ with col_g1:
     })
     fig_source = px.bar(source_data, x='Source', y='Volume', color='High-Quality %',
                       color_continuous_scale='Viridis', title="Volume vs. Quality Density")
-    fig_source.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_family="JetBrains Mono")
+    fig_source.update_layout(**PLOTLY_DARK_LAYOUT)
     st.plotly_chart(fig_source, use_container_width=True)
 
 with col_g2:
@@ -95,8 +108,8 @@ with col_g2:
         number=[1482, 650, 156, 42, 12],
         stage=["Collected", "Scored > 20", "Enriched (High Score)", "Drafts Created", "Meetings"]
     )
-    fig_funnel = px.funnel(funnel_data, x='number', y='stage', color_discrete_sequence=['#6caf2b'])
-    fig_funnel.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_family="JetBrains Mono")
+    fig_funnel = px.funnel(funnel_data, x='number', y='stage', color_discrete_sequence=[COLOR_PRIMARY])
+    fig_funnel.update_layout(**PLOTLY_DARK_LAYOUT)
     st.plotly_chart(fig_funnel, use_container_width=True)
 
 # -- Chat Interface for CRM (Simulation) --
@@ -117,14 +130,15 @@ with chat_sales:
 
 if st.button("RUN SALES PIPELINE (KW09)"):
     with st.status("Pipeline-Vorgang gestartet..."):
+        prog = st.progress(0)
         st.write("Polling RSS Feeds & Gmail Alerts...")
         time.sleep(0.8)
         st.write("Initial Scoring (Regex Engine)...")
-        st.progress(0.3)
+        prog.progress(0.3)
         time.sleep(1.0)
         st.write("URL Enrichment: Deep-Parsing 15 promising leads...")
-        st.progress(0.7)
+        prog.progress(0.7)
         time.sleep(1.5)
         st.write("Deduplication & CRM Sync...")
-        st.progress(1.0)
+        prog.progress(1.0)
     st.success("SUCCESS: 8 neue High-Score Leads identifiziert und in CRM importiert.")

@@ -3,7 +3,7 @@ import numpy as np
 import plotly.graph_objects as go
 import time
 
-from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
+from ui_shared import COLOR_PRIMARY, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
 init_page()
 render_header()
@@ -53,29 +53,26 @@ st.divider()
 # -- Visual Analytics: Campbell Diagram --
 st.write("📊 **Interactive Campbell Diagram (Frequency vs. RPM)**")
 
-# Generate realistic-looking Campbell data
-rpm_range = np.arange(500, 5001, 25)
-freq_range = np.arange(0, 1001, 2)
+@st.cache_data
+def _build_campbell_data():
+    np.random.seed(42)
+    rpm_range = np.arange(500, 5001, 25)
+    freq_range = np.arange(0, 1001, 2)
+    z_campbell = np.random.normal(0.01, 0.005, (len(freq_range), len(rpm_range)))
+    for order in [1, 2, 3, 4, 6]:
+        for j, rpm in enumerate(rpm_range):
+            target_freq = (rpm / 60.0) * order
+            idx = np.argmin(np.abs(freq_range - target_freq))
+            if idx < len(freq_range):
+                resonance_factor = 1.0 + 2.0 * np.exp(-((rpm - 3200)**2) / (2 * 400**2))
+                z_campbell[idx, j] += 0.5 * resonance_factor + np.random.normal(0, 0.05)
+    idx_res = np.argmin(np.abs(freq_range - 240))
+    z_campbell[idx_res, :] += 0.2 * np.exp(-((rpm_range - 3200)**2) / (2 * 1000**2))
+    order_2 = 0.4 * (rpm_range / 1000)**1.5 + 0.8 * np.exp(-((rpm_range - 3250)**2) / (2 * 250**2))
+    order_4 = 0.2 * (rpm_range / 1000)**1.2 + 0.3 * np.exp(-((rpm_range - 4100)**2) / (2 * 300**2))
+    return rpm_range, freq_range, z_campbell, order_2, order_4
 
-# Create a base noise floor
-z_campbell = np.random.normal(0.01, 0.005, (len(freq_range), len(rpm_range)))
-
-# Add Engine Orders (Straight lines through origin)
-# Order line: freq = (RPM / 60) * Order
-orders = [1, 2, 3, 4, 6]
-for order in orders:
-    for j, rpm in enumerate(rpm_range):
-        target_freq = (rpm / 60.0) * order
-        idx = np.argmin(np.abs(freq_range - target_freq))
-        if idx < len(freq_range):
-            # Amplitude increases with RPM (simple resonance simulation)
-            resonance_factor = 1.0 + 2.0 * np.exp(-((rpm - 3200)**2) / (2 * 400**2))
-            z_campbell[idx, j] += 0.5 * resonance_factor + np.random.normal(0, 0.05)
-
-# Add a structural resonance (Horizontal line)
-resonance_freq = 240 # Hz
-idx_res = np.argmin(np.abs(freq_range - resonance_freq))
-z_campbell[idx_res, :] += 0.2 * np.exp(-((rpm_range - 3200)**2) / (2 * 1000**2))
+rpm_range, freq_range, z_campbell, order_2, order_4 = _build_campbell_data()
 
 fig_camp = go.Figure(data=go.Heatmap(
     z=z_campbell,
@@ -97,15 +94,7 @@ for order in [1, 2, 3]:
         showlegend=False
     ))
 
-fig_camp.update_layout(
-    template="plotly_dark",
-    paper_bgcolor='rgba(0,0,0,0)',
-    plot_bgcolor='rgba(0,0,0,0)',
-    font_family="JetBrains Mono",
-    xaxis_title="DREHZAHL [RPM]",
-    yaxis_title="FREQUENZ [Hz]",
-    height=600
-)
+fig_camp.update_layout(**PLOTLY_DARK_LAYOUT, xaxis_title="DREHZAHL [RPM]", yaxis_title="FREQUENZ [Hz]", height=600)
 st.plotly_chart(fig_camp, use_container_width=True)
 
 # -- Motor Order Cut --
@@ -114,24 +103,11 @@ st.write("📈 **Motor Order Cuts (Structural Health Analysis)**")
 col_cut1, col_cut2 = st.columns([2, 1])
 
 with col_cut1:
-    # Generate order cut data for 2.0 Order
-    order_2 = 0.4 * (rpm_range/1000)**1.5 + 0.8 * np.exp(-((rpm_range - 3250)**2) / (2 * 250**2))
-    order_4 = 0.2 * (rpm_range/1000)**1.2 + 0.3 * np.exp(-((rpm_range - 4100)**2) / (2 * 300**2))
-
     fig_order = go.Figure()
-    fig_order.add_trace(go.Scatter(x=rpm_range, y=order_2, name="Order 2.0 (Resonance @3250)", line=dict(color='#6caf2b', width=3)))
+    fig_order.add_trace(go.Scatter(x=rpm_range, y=order_2, name="Order 2.0 (Resonance @3250)", line=dict(color=COLOR_PRIMARY, width=3)))
     fig_order.add_trace(go.Scatter(x=rpm_range, y=order_4, name="Order 4.0", line=dict(color='#8b949e', width=2, dash='dot')))
 
-    fig_order.update_layout(
-        template="plotly_dark",
-        paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)',
-        font_family="JetBrains Mono",
-        xaxis_title="RPM",
-        yaxis_title="Amplitude [g]",
-        legend=dict(orientation="h", y=1.1),
-        height=400
-    )
+    fig_order.update_layout(**PLOTLY_DARK_LAYOUT, xaxis_title="RPM", yaxis_title="Amplitude [g]", legend=dict(orientation="h", y=1.1), height=400)
     st.plotly_chart(fig_order, use_container_width=True)
 
 order_csv_rows = ["RPM,Order2.0,Order4.0"]
@@ -154,14 +130,15 @@ with col_cut2:
 
 if st.button("RUN SIGNAL PIPELINE (MOCK)"):
     with st.status("Aufbereitung der Zeitrohdaten läuft..."):
+        prog = st.progress(0)
         st.write("Lade Zeitreihen (8.192 Hz)...")
         time.sleep(0.8)
         st.write("Hanning-Fensterung & FFT-Berechnung...")
-        st.progress(0.4)
+        prog.progress(0.4)
         time.sleep(1.0)
         st.write("Phasen-Referenzierung zu Sensor '00-REF'...")
-        st.progress(0.7)
+        prog.progress(0.7)
         time.sleep(0.6)
         st.write("Mittelung über 4 Messreihen abgeschlossen.")
-        st.progress(1.0)
+        prog.progress(1.0)
     st.success("CAMPBELL-MATRIX erfolgreich generiert.")

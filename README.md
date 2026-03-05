@@ -87,6 +87,7 @@ This repository serves as a **public dashboard** for my private projects in the 
 *   **AI/ML:** Autonomous Agents, Local LLMs (Ollama), OpenAI/Anthropic APIs.
 *   **Engineering:** Signal Processing, Vibration Analysis (NVH), Structural Dynamics.
 *   **Software Quality:** `uv` (Package Management), `ruff` (Linting), `mypy` (Type Safety), `pytest` (Testing).
+*   **Showcase App:** Streamlit multi-page app with `@st.cache_data` for heavy computations, shared brand constants (`COLOR_*`, `PLOTLY_DARK_LAYOUT`) in `ui_shared.py`, and no external runtime dependencies in the UI layer.
 
 ---
 

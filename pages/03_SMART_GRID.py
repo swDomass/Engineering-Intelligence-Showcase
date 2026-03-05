@@ -4,7 +4,7 @@ import numpy as np
 import plotly.graph_objects as go
 import time
 
-from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
+from ui_shared import COLOR_ACCENT, COLOR_DANGER, COLOR_MUTED, COLOR_PRIMARY, COLOR_TEXT, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
 init_page()
 render_header()
@@ -49,65 +49,50 @@ st.divider()
 # -- Visual Analysis: Load Profile vs. Generation --
 st.write("📊 **Energy Balance: 72h Forecast (incl. 24h Projection)**")
 
-# Generate realistic 15-min data for 72 hours (3 days)
-# Total periods: 72h * 4 periods/h = 288
-# Actual data: first 48h (192 periods)
-total_periods = 72 * 4
-actual_periods = 48 * 4
-times_eeg = pd.date_range(end=pd.Timestamp.now() + pd.Timedelta(hours=24), periods=total_periods, freq='15min')
+@st.cache_data
+def _build_energy_data():
+    total_periods = 72 * 4
+    actual_periods = 48 * 4
+    times_eeg = pd.date_range(end=pd.Timestamp.now() + pd.Timedelta(hours=24), periods=total_periods, freq="15min")
+    hour = (times_eeg.hour + times_eeg.minute / 60).to_numpy()
+    base_cons = 40 + 15 * np.sin((hour - 6) * np.pi / 12)**2 + 10 * np.sin((hour - 18) * np.pi / 6)**2
+    consumption = base_cons + np.random.normal(0, 4, total_periods)
+    generation = 120 * np.maximum(0, np.sin((hour - 6) * np.pi / 12)) + np.random.normal(0, 2, total_periods)
+    generation[96:192] *= 0.35
+    pv_forecast = 110 * np.maximum(0, np.sin((hour - 5.8) * np.pi / 12)) + np.random.normal(0, 5, total_periods)
+    cons_forecast = base_cons * 1.1 + np.random.normal(0, 8, total_periods)
+    df = pd.DataFrame({
+        "Time": times_eeg,
+        "Consumption": consumption,
+        "Generation": generation,
+        "PV Forecast": pv_forecast,
+        "Cons Forecast": cons_forecast,
+    })
+    df.loc[actual_periods:, ["Consumption", "Generation"]] = np.nan
+    now_ts = times_eeg[actual_periods - 1]
+    return df, now_ts
 
-# Time helper for seasonality
-hour = (times_eeg.hour + times_eeg.minute / 60).to_numpy()
-
-# 1. ACTUAL CONSUMPTION (only first 48h, then NaN)
-base_cons = 40 + 15 * np.sin((hour - 6) * np.pi / 12)**2 + 10 * np.sin((hour - 18) * np.pi / 6)**2
-consumption = base_cons + np.random.normal(0, 4, total_periods)
-
-# 2. ACTUAL GENERATION (only first 48h, then NaN)
-generation = 120 * np.maximum(0, np.sin((hour - 6) * np.pi / 12)) + np.random.normal(0, 2, total_periods)
-# Apply "fog" effect to part of the second day
-generation[96:192] *= 0.35 
-
-# 3. FORECASTS (Full 72h)
-# PV Forecast with some bias and phase shift
-pv_forecast = 110 * np.maximum(0, np.sin((hour - 5.8) * np.pi / 12)) + np.random.normal(0, 5, total_periods)
-# Consumption Forecast with different noise and amplitude
-cons_forecast = base_cons * 1.1 + np.random.normal(0, 8, total_periods)
-
-# Create DataFrame and mask actual values after 48h
-df_energy = pd.DataFrame({
-    'Time': times_eeg,
-    'Consumption': consumption,
-    'Generation': generation,
-    'PV Forecast': pv_forecast,
-    'Cons Forecast': cons_forecast
-})
-
-# Masking the "Actuals" for the last 24h
-df_energy.loc[actual_periods:, ['Consumption', 'Generation']] = np.nan
+df_energy, now_ts = _build_energy_data()
 
 fig_energy = go.Figure()
 
 # Forecasts (Dashed lines)
 fig_energy.add_trace(go.Scatter(x=df_energy['Time'], y=df_energy['Cons Forecast'], name='Forecast: Consumption', 
-                              line=dict(color='#8b949e', width=1, dash='dot')))
+                              line=dict(color=COLOR_MUTED, width=1, dash='dot')))
 fig_energy.add_trace(go.Scatter(x=df_energy['Time'], y=df_energy['PV Forecast'], name='Forecast: PV', 
-                              line=dict(color='#ffcc00', width=1, dash='dot')))
+                              line=dict(color=COLOR_ACCENT, width=1, dash='dot')))
 
 # Actuals (Solid lines / Fills)
 fig_energy.add_trace(go.Scatter(x=df_energy['Time'], y=df_energy['Consumption'], name='Actual: Consumption', 
-                              line=dict(color='#c9d1d9', width=2)))
+                              line=dict(color=COLOR_TEXT, width=2)))
 fig_energy.add_trace(go.Scatter(x=df_energy['Time'], y=df_energy['Generation'], name='Actual: Generation', 
-                              fill='tozeroy', line=dict(color='#6caf2b', width=3)))
+                              fill='tozeroy', line=dict(color=COLOR_PRIMARY, width=3)))
 
 # Indicator for now
-now_ts = times_eeg[actual_periods-1]
-fig_energy.add_vline(x=now_ts, line_width=2, line_dash="dash", line_color="#ff4b4b")
+fig_energy.add_vline(x=now_ts, line_width=2, line_dash="dash", line_color=COLOR_DANGER)
 fig_energy.add_annotation(x=now_ts, y=140, text="JETZT (Start Prognose)", showarrow=False, font_color="#ff4b4b")
 
-fig_energy.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
-                       font_family="JetBrains Mono", legend=dict(orientation="h", y=1.15),
-                       yaxis_title="Leistung [kW]", height=500)
+fig_energy.update_layout(**PLOTLY_DARK_LAYOUT, legend=dict(orientation="h", y=1.15), yaxis_title="Leistung [kW]", height=500)
 st.plotly_chart(fig_energy, use_container_width=True)
 
 # -- Technical Deep Dive: Feature Engineering --
@@ -136,14 +121,15 @@ get_sun_position(lat, lon)
 
 if st.button("RUN ETL PIPELINE (SIMULATION)"):
     with st.status("Processing Raw Energy Data..."):
+        prog = st.progress(0)
         st.write("Initializing SQLite Connection (WAL-Mode)...")
         time.sleep(1.0)
         st.write("Streaming 2.200+ Metering Points (15-min resolution)...")
-        st.progress(0.4)
+        prog.progress(0.4)
         time.sleep(1.2)
         st.write("Calculating Self-Sufficiency (Eigendeckung) for all members...")
-        st.progress(0.8)
+        prog.progress(0.8)
         time.sleep(0.8)
         st.write("Updating ML Forecast with newest weather data...")
-        st.progress(1.0)
+        prog.progress(1.0)
     st.success("SUCCESS: Database updated. Analysis results available in Dashboard.")

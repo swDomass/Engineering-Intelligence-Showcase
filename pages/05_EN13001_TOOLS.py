@@ -4,7 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import time
 
-from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
+from ui_shared import COLOR_DANGER, COLOR_PRIMARY, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
 MATERIAL_YIELD_STRENGTHS = {
     "S235": 235,
@@ -123,7 +123,7 @@ with col_calc2:
         title = {'text': "Ausnutzungsgrad [%]", 'font': {'size': 24}},
         gauge = {
             'axis': {'range': [None, 120], 'tickwidth': 1, 'tickcolor': "#c9d1d9"},
-            'bar': {'color': "#6caf2b" if utilization < 100 else "#ff4b4b"},
+            'bar': {'color': COLOR_PRIMARY if utilization < 100 else COLOR_DANGER},
             'bgcolor': "rgba(0,0,0,0)",
             'borderwidth': 2,
             'bordercolor': "#30363d",
@@ -139,7 +139,7 @@ with col_calc2:
             }
         }
     ))
-    fig_gauge.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', font_family="JetBrains Mono", height=350)
+    fig_gauge.update_layout(**PLOTLY_DARK_LAYOUT, height=350)
     st.plotly_chart(fig_gauge, use_container_width=True)
     
     if utilization > 100:
@@ -170,9 +170,9 @@ with col_hs1:
     y_ext = np.polyval(p, x_ext)
     
     fig_hs = px.line(x=x_ext, y=y_ext, labels={'x': 'Distanz / Blechdicke [t]', 'y': 'Spannung [MPa]'}, title="Hot-Spot Extrapolation (Type A)")
-    fig_hs.add_scatter(x=x_hs, y=y_hs, mode='markers', name='FEM Knoten', marker=dict(size=10, color='#6caf2b'))
-    fig_hs.add_scatter(x=[0], y=[np.polyval(p, 0)], mode='markers', name='Hot-Spot Stress', marker=dict(size=12, color='#ff4b4b', symbol='star'))
-    fig_hs.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_family="JetBrains Mono", height=300)
+    fig_hs.add_scatter(x=x_hs, y=y_hs, mode='markers', name='FEM Knoten', marker=dict(size=10, color=COLOR_PRIMARY))
+    fig_hs.add_scatter(x=[0], y=[np.polyval(p, 0)], mode='markers', name='Hot-Spot Stress', marker=dict(size=12, color=COLOR_DANGER, symbol='star'))
+    fig_hs.update_layout(**PLOTLY_DARK_LAYOUT, height=300)
     st.plotly_chart(fig_hs, use_container_width=True)
 
 with col_hs2:
@@ -191,14 +191,15 @@ with col_hs2:
 
 if st.button("RUN VALIDATION SUITE (MOCK)"):
     with st.status("Validierung aller EN13001 Nachweise..."):
+        prog = st.progress(0)
         st.write("Lade Materialdatenbank (Stahl/Guss)...")
         time.sleep(0.6)
         st.write("Prüfe geometrische Grenzbedingungen (§5.3)...")
-        st.progress(0.3)
+        prog.progress(0.3)
         time.sleep(0.8)
         st.write("Iterative Stabilitätsberechnung (Knicklängen)...")
-        st.progress(0.7)
+        prog.progress(0.7)
         time.sleep(1.0)
         st.write("Finalisierung der PDF-Berichtsstruktur...")
-        st.progress(1.0)
+        prog.progress(1.0)
     st.success("VALIDATION COMPLETE: 124 Checks passed. No critical errors found.")

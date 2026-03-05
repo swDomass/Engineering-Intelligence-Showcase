@@ -163,14 +163,15 @@ run_skill(
 
 if st.button("GENERATE CONTENT BUNDLE (MOCK)"):
     with st.status("KI-Experte analysiert Bilder..."):
+        prog = st.progress(0)
         st.write("Extrahiere visuelle Merkmale (Materialien, Stil, Farben)...")
         time.sleep(1.2)
         st.write("Wende Brand-DNA an (Tonalität: exklusiv/wohnlich)...")
-        st.progress(0.4)
+        prog.progress(0.4)
         time.sleep(1.0)
         st.write("Generiere Texte für 5 Plattformen & SEO-Tags...")
-        st.progress(0.7)
+        prog.progress(0.7)
         time.sleep(1.5)
         st.write("Erstelle Voiceover-Script & Canva Prompts...")
-        st.progress(1.0)
+        prog.progress(1.0)
     st.success("SUCCESS: Content-Bundle erstellt. Bereit für Export nach Instagram & WordPress.")

@@ -6,6 +6,24 @@ SIMULATION_NOTICE = (
     "simulierte bzw. anonymisierte Beispieldaten."
 )
 
+# Brand colours — single source of truth for Python/Plotly code
+# (CSS in apply_styles uses these values inline as strings)
+COLOR_PRIMARY = "#6caf2b"
+COLOR_BG = "#0d1117"
+COLOR_BORDER = "#30363d"
+COLOR_TEXT = "#c9d1d9"
+COLOR_MUTED = "#8b949e"
+COLOR_DANGER = "#ff4b4b"
+COLOR_ACCENT = "#ffcc00"
+
+# Base Plotly layout — spread with ** into every fig.update_layout()
+PLOTLY_DARK_LAYOUT: dict = dict(
+    template="plotly_dark",
+    paper_bgcolor="rgba(0,0,0,0)",
+    plot_bgcolor="rgba(0,0,0,0)",
+    font_family="JetBrains Mono",
+)
+
 
 def init_page(page_title: str | None = None) -> None:
     st.set_page_config(page_title=page_title or SHOWCASE_TITLE, page_icon="⚙️", layout="wide")

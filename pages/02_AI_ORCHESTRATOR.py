@@ -4,7 +4,7 @@ import numpy as np
 import plotly.express as px
 import time
 
-from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
+from ui_shared import COLOR_BORDER, COLOR_PRIMARY, COLOR_TEXT, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
 init_page()
 render_header()
@@ -63,18 +63,16 @@ with col_left:
     })
     fig_cap = px.line(capacity_data, x='Time', y=['Claude', 'Gemini', 'Codex'],
                      labels={'value': 'REMAINING %', 'Time': 'TIME (UTC)'},
-                     color_discrete_map={'Claude': '#6caf2b', 'Gemini': '#30363d', 'Codex': '#c9d1d9'})
-    fig_cap.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
-                         font_family="JetBrains Mono", legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
+                     color_discrete_map={'Claude': COLOR_PRIMARY, 'Gemini': COLOR_BORDER, 'Codex': COLOR_TEXT})
+    fig_cap.update_layout(**PLOTLY_DARK_LAYOUT, legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1))
     st.plotly_chart(fig_cap, use_container_width=True)
 
 with col_right:
     st.write("📂 **Task Distribution**")
     dist_data = pd.DataFrame({'Provider': ['Claude', 'Gemini', 'Codex'], 'Tasks': [142, 45, 12]})
     fig_pie = px.pie(dist_data, values='Tasks', names='Provider', hole=0.4,
-                     color_discrete_sequence=['#6caf2b', '#30363d', '#444c56'])
-    fig_pie.update_layout(template="plotly_dark", paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', 
-                         font_family="JetBrains Mono", showlegend=False)
+                     color_discrete_sequence=[COLOR_PRIMARY, COLOR_BORDER, '#444c56'])
+    fig_pie.update_layout(**PLOTLY_DARK_LAYOUT, showlegend=False)
     st.plotly_chart(fig_pie, use_container_width=True)
 
 # -- Live Interaction Mockup --
