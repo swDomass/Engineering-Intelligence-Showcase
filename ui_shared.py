@@ -58,8 +58,8 @@ def apply_styles() -> None:
         [data-testid="stCaptionContainer"],
         [data-testid="stWidgetLabel"],
         [data-testid="stSidebarContent"] {
-            color: #c9d1d9;
-            font-family: 'Space Grotesk', sans-serif;
+            color: #c9d1d9 !important;
+            font-family: 'Space Grotesk', sans-serif !important;
         }
 
         [data-testid="stHeader"] {
