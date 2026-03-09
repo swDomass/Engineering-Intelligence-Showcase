@@ -44,9 +44,22 @@ def apply_styles() -> None:
 
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=JetBrains+Mono&display=swap');
 
-        html, body, [class*="css"] {
-            font-family: 'Space Grotesk', sans-serif;
+        html, body {
+            font-family: 'Space Grotesk', sans-serif !important;
+            color: #c9d1d9 !important;
+        }
+
+        /* Streamlit text elements — explicit selectors, browser-safe */
+        p, span, li, label, div,
+        h1, h2, h3, h4, h5, h6,
+        .stMarkdown, .stText,
+        [data-testid="stMarkdownContainer"],
+        [data-testid="stText"],
+        [data-testid="stCaptionContainer"],
+        [data-testid="stWidgetLabel"],
+        [data-testid="stSidebarContent"] {
             color: #c9d1d9;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         [data-testid="stHeader"] {
