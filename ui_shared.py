@@ -50,7 +50,8 @@ def apply_styles() -> None:
         }
 
         /* Streamlit text elements — explicit selectors, browser-safe */
-        p, span, li, label, div,
+        /* Note: span intentionally excluded to not break Material Icons font */
+        p, li, label,
         h1, h2, h3, h4, h5, h6,
         .stMarkdown, .stText,
         [data-testid="stMarkdownContainer"],
