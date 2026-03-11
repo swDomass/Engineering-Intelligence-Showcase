@@ -2,7 +2,6 @@ import streamlit as st
 import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
-import time
 
 from ui_shared import COLOR_DANGER, COLOR_PRIMARY, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
@@ -187,19 +186,3 @@ with col_hs2:
   "status": "PASSED"
 }
     """, language="json")
-    st.button("DOWNLOAD SAMPLE PDF REPORT", help="Generiert einen Beispieldokumentation")
-
-if st.button("RUN VALIDATION SUITE (MOCK)"):
-    with st.status("Validierung aller EN13001 Nachweise..."):
-        prog = st.progress(0)
-        st.write("Lade Materialdatenbank (Stahl/Guss)...")
-        time.sleep(0.6)
-        st.write("Prüfe geometrische Grenzbedingungen (§5.3)...")
-        prog.progress(0.3)
-        time.sleep(0.8)
-        st.write("Iterative Stabilitätsberechnung (Knicklängen)...")
-        prog.progress(0.7)
-        time.sleep(1.0)
-        st.write("Finalisierung der PDF-Berichtsstruktur...")
-        prog.progress(1.0)
-    st.success("VALIDATION COMPLETE: 124 Checks passed. No critical errors found.")

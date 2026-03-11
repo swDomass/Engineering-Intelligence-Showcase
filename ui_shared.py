@@ -125,7 +125,7 @@ def apply_styles() -> None:
 def render_header() -> None:
     col_logo, col_title = st.columns([1, 4])
     with col_title:
-        st.title("Python-Automatisierung für technische Unternehmen")
+        st.title("Python und KI Automatisierung für Unternehmen")
         st.markdown("*Showcase: KI-Workflows, Engineering-Analytik und Prozessautomatisierung*")
     st.divider()
 

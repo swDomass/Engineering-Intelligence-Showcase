@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
-import time
 
 from ui_shared import COLOR_PRIMARY, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
@@ -127,18 +126,3 @@ with chat_sales:
     """)
     st.chat_message("user").write("Ja, bitte recherche starten und danach einen Gmail Entwurf vorbereiten.")
     st.chat_message("assistant").write("🚀 Recherche läuft... (Web-Mining aktiviert). Entwurf wird in 30s erstellt.")
-
-if st.button("RUN SALES PIPELINE (KW09)"):
-    with st.status("Pipeline-Vorgang gestartet..."):
-        prog = st.progress(0)
-        st.write("Polling RSS Feeds & Gmail Alerts...")
-        time.sleep(0.8)
-        st.write("Initial Scoring (Regex Engine)...")
-        prog.progress(0.3)
-        time.sleep(1.0)
-        st.write("URL Enrichment: Deep-Parsing 15 promising leads...")
-        prog.progress(0.7)
-        time.sleep(1.5)
-        st.write("Deduplication & CRM Sync...")
-        prog.progress(1.0)
-    st.success("SUCCESS: 8 neue High-Score Leads identifiziert und in CRM importiert.")

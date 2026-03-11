@@ -1,5 +1,4 @@
 import streamlit as st
-import time
 
 from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
 
@@ -160,18 +159,3 @@ run_skill(
   output_format="multi_platform_bundle"
 )
     """, language="python")
-
-if st.button("GENERATE CONTENT BUNDLE (MOCK)"):
-    with st.status("KI-Experte analysiert Bilder..."):
-        prog = st.progress(0)
-        st.write("Extrahiere visuelle Merkmale (Materialien, Stil, Farben)...")
-        time.sleep(1.2)
-        st.write("Wende Brand-DNA an (Tonalität: exklusiv/wohnlich)...")
-        prog.progress(0.4)
-        time.sleep(1.0)
-        st.write("Generiere Texte für 5 Plattformen & SEO-Tags...")
-        prog.progress(0.7)
-        time.sleep(1.5)
-        st.write("Erstelle Voiceover-Script & Canva Prompts...")
-        prog.progress(1.0)
-    st.success("SUCCESS: Content-Bundle erstellt. Bereit für Export nach Instagram & WordPress.")

@@ -1,7 +1,6 @@
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
-import time
 
 from ui_shared import COLOR_PRIMARY, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
@@ -127,18 +126,3 @@ with col_cut2:
         mime="text/csv",
     )
     st.button("GENERATE .FEM (RLOAD)", help="Erstellt eine Hypermesh-kompatible Datei")
-
-if st.button("RUN SIGNAL PIPELINE (MOCK)"):
-    with st.status("Aufbereitung der Zeitrohdaten läuft..."):
-        prog = st.progress(0)
-        st.write("Lade Zeitreihen (8.192 Hz)...")
-        time.sleep(0.8)
-        st.write("Hanning-Fensterung & FFT-Berechnung...")
-        prog.progress(0.4)
-        time.sleep(1.0)
-        st.write("Phasen-Referenzierung zu Sensor '00-REF'...")
-        prog.progress(0.7)
-        time.sleep(0.6)
-        st.write("Mittelung über 4 Messreihen abgeschlossen.")
-        prog.progress(1.0)
-    st.success("CAMPBELL-MATRIX erfolgreich generiert.")

@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-import time
 
 from ui_shared import COLOR_ACCENT, COLOR_DANGER, COLOR_MUTED, COLOR_PRIMARY, COLOR_TEXT, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
@@ -118,18 +117,3 @@ PRAGMA journal_mode=WAL;
 astronomical_features = 
 get_sun_position(lat, lon)
     """, language="python")
-
-if st.button("RUN ETL PIPELINE (SIMULATION)"):
-    with st.status("Processing Raw Energy Data..."):
-        prog = st.progress(0)
-        st.write("Initializing SQLite Connection (WAL-Mode)...")
-        time.sleep(1.0)
-        st.write("Streaming 2.200+ Metering Points (15-min resolution)...")
-        prog.progress(0.4)
-        time.sleep(1.2)
-        st.write("Calculating Self-Sufficiency (Eigendeckung) for all members...")
-        prog.progress(0.8)
-        time.sleep(0.8)
-        st.write("Updating ML Forecast with newest weather data...")
-        prog.progress(1.0)
-    st.success("SUCCESS: Database updated. Analysis results available in Dashboard.")

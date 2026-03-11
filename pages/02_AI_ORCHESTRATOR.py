@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import time
 
 from ui_shared import COLOR_BORDER, COLOR_PRIMARY, COLOR_TEXT, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
@@ -145,20 +144,3 @@ with col_chat:
         st.chat_message("assistant").write("💡 **Freie Kapazität verfügbar!**\nClaude: 82% übrig.\n\nVorschläge:\n1. Skill: vault-gardener\n2. Git: AI_orchestrator (3 Änderungen)\n3. Retry: Fix Unicode-Bug\n\n/pick 1-3 oder /decline")
         st.chat_message("user").write("/pick 1")
         st.chat_message("assistant").write("👍 Vorschlag 1 angenommen. Starte `vault-gardener`...")
-
-if st.button("TRIGGER TEST PIPELINE (MOCK)"):
-    progress_bar = st.progress(0)
-    status_text = st.empty()
-    steps = [
-        "Syncing Obsidian Vault Context...", 
-        "Checking Provider Limits (npx cclimits)...",
-        "Routing Task to Claude (Best available)...",
-        "Executing Review-Loop Skill...",
-        "Stashing Git changes for safety...",
-        "Finalizing Queue entry and notifying Telegram..."
-    ]
-    for i, step in enumerate(steps):
-        status_text.info(f"RUNNING: {step}")
-        time.sleep(0.7)
-        progress_bar.progress((i + 1) / len(steps))
-    st.success("TEST RUN COMPLETED: Agent-Queue synchronized and tasks processed.")
