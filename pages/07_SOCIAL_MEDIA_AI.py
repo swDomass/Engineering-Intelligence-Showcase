@@ -1,6 +1,8 @@
 import streamlit as st
+import pandas as pd
+import plotly.express as px
 
-from ui_shared import init_page, render_demo_notice, render_header, render_sidebar
+from ui_shared import COLOR_PRIMARY, PLOTLY_DARK_LAYOUT, init_page, render_demo_notice, render_header, render_sidebar
 
 init_page()
 render_header()
@@ -84,7 +86,7 @@ höchsten Komfort mit zeitlosem Design. Die perfekte Kombination aus Walnuss
 und edlen Stoffen für dein Zuhause.
 
 HASHTAGS:
-#InteriorDesign #LuxuryLiving #HomeDecor2025 #InteriorInspo #ShowroomStyle
+#InteriorDesign #LuxuryLiving #HomeDecor2026 #InteriorInspo #ShowroomStyle
 
 TEXT-OVERLAYS:
 1. Dein neues Highlight?
@@ -105,7 +107,7 @@ POV: Du hast das perfekte Statement-Piece für dein Wohnzimmer gefunden 🛋️�
 Welche Farbe würdest du wählen? #InteriorCheck #HomeGoals
 
 HASHTAGS:
-#DesignFurniture #InteriorTok #ModernHome2025 #LivingRoomVibes
+#DesignFurniture #InteriorTok #ModernHome2026 #LivingRoomVibes
         """, language="markdown")
 
     with tab_pin:
@@ -136,6 +138,34 @@ Dieses handgefertigte Möbelstück besticht durch seine einzigartige Kombination
 
 st.divider()
 
+# -- Content Analytics --
+st.write("📊 **Content Output & Engagement per Platform**")
+col_chart1, col_chart2 = st.columns(2)
+
+with col_chart1:
+    platform_data = pd.DataFrame({
+        "Platform": ["Instagram", "TikTok", "Pinterest", "Facebook", "YouTube"],
+        "Posts / Monat": [28, 20, 35, 12, 4],
+    })
+    fig_output = px.bar(platform_data, x="Platform", y="Posts / Monat",
+                        color_discrete_sequence=[COLOR_PRIMARY],
+                        title="Content Output pro Plattform")
+    fig_output.update_layout(**PLOTLY_DARK_LAYOUT)
+    st.plotly_chart(fig_output, use_container_width=True)
+
+with col_chart2:
+    engagement_data = pd.DataFrame({
+        "Platform": ["Instagram", "TikTok", "Pinterest", "Facebook", "YouTube"],
+        "Engagement Rate [%]": [4.2, 6.8, 2.1, 1.5, 3.9],
+    })
+    fig_engage = px.bar(engagement_data, x="Platform", y="Engagement Rate [%]",
+                        color_discrete_sequence=["#ffcc00"],
+                        title="Engagement Rate pro Plattform")
+    fig_engage.update_layout(**PLOTLY_DARK_LAYOUT)
+    st.plotly_chart(fig_engage, use_container_width=True)
+
+st.divider()
+
 # -- Technical Architecture --
 st.write("🏗️ **Technical Architecture: The 'Skill-System'**")
 col_arch1, col_arch2 = st.columns([3, 2])
@@ -143,7 +173,7 @@ col_arch1, col_arch2 = st.columns([3, 2])
 with col_arch1:
     st.markdown("""
     Das System basiert auf einem **Agentic Workflow** innerhalb eines Obsidian Vaults:
-    1. **Vision-Layer:** GPT-4o / Claude 3.5 Vision analysieren Produktbilder.
+    1. **Vision-Layer:** Vision-LLMs (GPT-4o, Claude) analysieren Produktbilder.
     2. **Context-Layer:** Einbindung der `Brand-DNA` (Tonalität, Slogan, regionale Präsenz).
     3. **Generation-Layer:** Spezialisierte Prompts für jede Plattform (Pinterest SEO vs. TikTok Slang).
     4. **Automation-Layer:** Export von strukturierten Markdown-Files für den Orchestrator.

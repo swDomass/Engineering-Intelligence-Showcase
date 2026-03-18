@@ -114,6 +114,5 @@ python -m src.models.train
 # DB WAL-Mode for Speed
 PRAGMA journal_mode=WAL;
 # Feature Engineering
-astronomical_features = 
-get_sun_position(lat, lon)
+astronomical_features = get_sun_position(lat, lon)
     """, language="python")

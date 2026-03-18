@@ -8,7 +8,9 @@ This repository serves as a **public dashboard** for my private projects in the 
 
 ## 🏗️ Core Project Pillars
 
-### 2. AI Orchestrator: Autonomous Agent Control (AI / Sales Ops)
+> **Note:** This showcase app is built with **Streamlit** to present the projects interactively. The actual projects behind each section use broader tech stacks (PyQt6, Flask, Dash, etc.) and live in private repositories.
+
+### 1. AI Orchestrator: Autonomous Agent Control (AI / Sales Ops)
 *   **Project:** `AI_orchestrator`
 *   **Problem:** Managing multiple AI agents and long-running tasks across different providers (Claude, Gemini, Codex) without manual intervention.
 *   **Solution:** A robust Python-based orchestrator with a Markdown-based queue system, automated provider fallbacks, and a **Telegram integration** for remote control and approvals.
@@ -17,10 +19,10 @@ This repository serves as a **public dashboard** for my private projects in the 
     *   **Heartbeat Mechanism:** Continuous monitoring of system health, disk space, and git status, with automated summaries and cleanup tasks.
     *   **Policy Engine:** Fine-grained security layer (AUTO / APPROVE / DENY) with interactive Telegram approvals for risky operations.
     *   **Analytics Dashboard:** Built-in web dashboard (Chart.js) for tracking task success rates, provider utilization, and capacity timelines.
-*   **Key Tech:** Python 3.10+, Telegram Bot API, Multi-Provider Routing (Claude/Gemini/Codex), YAML-based Policy Engine, TF-IDF Memory System.
+*   **Key Tech:** Python 3.11+, Telegram Bot API, Multi-Provider Routing (Claude/Gemini/Codex), YAML-based Policy Engine, TF-IDF Memory System.
 *   **Impact:** Fully autonomous execution of coding, review, and documentation tasks with human-in-the-loop safety layers.
 
-### 3. Smart Grid Analytics: Energy Community Management & PV Forecast (Energy / ML)
+### 2. Smart Grid Analytics: Energy Community Management & PV Forecast (Energy / ML)
 *   **Project:** `energy_community_analysis`
 *   **Problem:** Managing decentralized energy communities (EEG) with thousands of members requires precise tracking of 15-minute consumption/generation data and accurate forecasting to optimize local energy usage.
 *   **Solution:** A comprehensive energy management system for a **regional energy community** (2,200+ metering points). It features a robust ETL pipeline, quarterly data partitioning in SQLite, and an interactive Dash dashboard for real-time analytics.
@@ -31,7 +33,7 @@ This repository serves as a **public dashboard** for my private projects in the 
 *   **Key Tech:** Python (uv), SQLite (WAL-mode), XGBoost, Prophet, pvlib, Dash/Plotly, Optuna.
 *   **Impact:** Optimized local energy consumption and improved grid stability for an entire region.
 
-### 4. Engineering Signal Processing: Zeitrohdaten (Mechanical Engineering)
+### 3. Engineering Signal Processing: Zeitrohdaten (Mechanical Engineering)
 *   **Project:** `Aufbereitung_Zeitrohdaten`
 *   **Problem:** Raw vibration data from machinery (NVH - Noise, Vibration, Harshness) is complex and unorganized. Manual transformation of time-series data into frequency-domain insights (Campbell diagrams) is time-consuming and prone to errors.
 *   **Solution:** A high-performance automated pipeline for cleaning and transforming raw 15-minute sensor data into engineering-grade charts. It handles multi-sensor synchronization, Hanning windowing, and high-resolution FFT (Fast Fourier Transform).
@@ -43,9 +45,9 @@ This repository serves as a **public dashboard** for my private projects in the 
 *   **Key Tech:** Python, Signal Processing (FFT), NumPy, Hanning Windowing, Matplotlib/Plotly, FEM Export (RLOAD).
 *   **Impact:** 90% reduction in manual data preparation time. Enables rapid structural health monitoring and precise identification of resonance issues in cranes and automotive components.
 
-### 5. EN13001 Tool-Suite: Structural Crane Component Design (Mechanical Engineering)
+### 4. EN13001 Tool-Suite: Structural Crane Component Design (Mechanical Engineering)
 *   **Project:** `EN13001_Tool-Suite`
-*   **Problem:** Manual crane statics calculations according to EN 13001 are complex, time-consuming, and error-prone. Legacy tools (Matcad) were outdated and lacked modern integration.
+*   **Problem:** Manual crane statics calculations according to EN 13001 are complex, time-consuming, and error-prone. Legacy tools (Mathcad) were outdated and lacked modern integration.
 *   **Solution:** A comprehensive Python-based suite for norm-compliant (DIN EN 13001) design of crane components. It features a modern PyQt6 GUI, automated PDF reporting, and high-precision calculation modules.
 *   **Advanced Features:**
     *   **Multi-Module Architecture:** Specialized calculators for Bolts, Welds (V2.0 fully norm-compliant), Fatigue, Pins, Wheel-Rail contact, and Elastic Stability (Buckling/Piping).
@@ -55,7 +57,7 @@ This repository serves as a **public dashboard** for my private projects in the 
 *   **Key Tech:** Python 3.11, PyQt6, NumPy, Matplotlib, ReportLab (PDF), PyInstaller (EXE).
 *   **Impact:** 70% faster verification cycles for crane components. Direct transition from "raw FEM results" to "norm-compliant documentation".
 
-### 6. AI-Driven Sales Automation (Sales Ops / AI)
+### 5. AI-Driven Sales Automation (Sales Ops / AI)
 *   **Project:** `Engineering-Sales-Intelligence`
 *   **Problem:** High manual effort in lead generation, qualification, and CRM management for specialized engineering consultancies (FEM/CAE). Standard tools are too generic for deep-tech keyword requirements (e.g., distinguishing "EN 13001" from generic "statics").
 *   **Solution:** A full-stack automation pipeline that collects leads from RSS, job portals (JobPortal-A), and Gmail alerts, scores them with engineering-specific logic, and manages them in a custom CRM.
@@ -68,7 +70,7 @@ This repository serves as a **public dashboard** for my private projects in the 
 *   **Key Tech:** Python 3.12, SQLite (WAL mode), Ollama, Gmail API (OAuth 2.0), Flask, Sentence Transformers (Semantic Search).
 *   **Impact:** 80% reduction in lead-sourcing time. Transition from manual browsing to a "Human-in-the-loop" approval workflow where the engineer only reviews high-value, pre-qualified leads.
 
-### 7. Social Media AI: Creative Ops & SEO Automation (Creative Ops / AI)
+### 6. Social Media AI: Creative Ops & SEO Automation (Creative Ops / AI)
 *   **Project:** `Boutique-SocialMedia` & `Vault-Skills`
 *   **Problem:** High manual effort in creating consistent, high-quality social media content and SEO-optimized product pages for a specialized retail boutique across multiple platforms (Instagram, Facebook, Pinterest, TikTok, YouTube).
 *   **Solution:** A specialized AI skill system integrated into an Obsidian vault that automates the entire content lifecycle—from professional image analysis to cross-platform copy generation and SEO optimization.
@@ -86,7 +88,7 @@ This repository serves as a **public dashboard** for my private projects in the 
 ## 🧪 Tech Stack & Standards
 *   **AI/ML:** Autonomous Agents, Local LLMs (Ollama), OpenAI/Anthropic APIs.
 *   **Engineering:** Signal Processing, Vibration Analysis (NVH), Structural Dynamics.
-*   **Software Quality:** `uv` (Package Management), `ruff` (Linting), `mypy` (Type Safety), `pytest` (Testing).
+*   **Software Quality:** `uv` (Package Management).
 *   **Showcase App:** Streamlit multi-page app with `@st.cache_data` for heavy computations, shared brand constants (`COLOR_*`, `PLOTLY_DARK_LAYOUT`) in `ui_shared.py`, and no external runtime dependencies in the UI layer.
 
 ---

@@ -42,7 +42,7 @@ with st.expander("💡 SCHWINGUNGSANALYSE: PROBLEME & LÖSUNGEN", expanded=True)
 
 # -- Technical Specs Metrics --
 col_t1, col_t2, col_t3, col_t4 = st.columns(4)
-col_t1.metric("Sampling Rate", "8.192 Hz", help="Standard-Abtastrate für NVH-Messungen")
+col_t1.metric("Sampling Rate", "8.192 kHz", help="Standard-Abtastrate für NVH-Messungen")
 col_t2.metric("Frequency Res.", "2.0 Hz", help="Blockzeit: 0.5s | Hanning-Window")
 col_t3.metric("RPM Steps", "25 RPM", help="Abtastung über den Drehzahlhochlauf")
 col_t4.metric("Engine Orders", "1.0 - 5.0", help="Extraktion in 0.5er Schritten")
@@ -83,10 +83,13 @@ fig_camp = go.Figure(data=go.Heatmap(
 ))
 
 # Add Order Lines as annotation
-for order in [1, 2, 3]:
+for order in [1, 2, 3, 4, 6]:
+    y_start = (500 / 60) * order
+    y_end = min((5000 / 60) * order, 1000)
+    x_end = min(5000, 1000 * 60 / order) if y_end == 1000 else 5000
     fig_camp.add_trace(go.Scatter(
-        x=[500, 5000],
-        y=[(500/60)*order, (5000/60)*order],
+        x=[500, x_end],
+        y=[y_start, y_end],
         mode='lines',
         line=dict(color='rgba(255,255,255,0.3)', width=1, dash='dash'),
         name=f"Order {order}",

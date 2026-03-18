@@ -35,7 +35,7 @@ with st.expander("💡 KRANBAU-STATIK: PROBLEME & LÖSUNGEN", expanded=True):
         st.markdown("### ❌ Die Herausforderung")
         st.error("""
         - **Norm-Komplexität:** Die DIN EN 13001 umfasst tausende Seiten mit komplexen Faktoren (z.B. $\\alpha_w$).
-        - **Fehleranfälligkeit:** Manuelle Rechnungen in Excel oder Matcad sind schwer zu validieren.
+        - **Fehleranfälligkeit:** Manuelle Rechnungen in Excel oder Mathcad sind schwer zu validieren.
         - **Dokumentations-Aufwand:** Die Erstellung prüffähiger PDF-Berichte dauert oft länger als die Rechnung selbst.
         - **Legacy-Tools:** Veraltete Software bietet keine modernen Schnittstellen zu FEM oder AI.
         """)
@@ -143,7 +143,7 @@ with col_calc2:
     
     if utilization > 100:
         st.error(f"⚠️ **NACHWEIS NICHT ERFÜLLT!** Kombinierte Spannung ({sigma_v:.1f} MPa) überschreitet Grenzspannung ({allowable_stress:.1f} MPa).")
-    elif utilization == 0:
+    elif stress_sigma == 0 and stress_tau == 0:
         st.success("✅ **NACHWEIS ERFÜLLT.** Ausnutzung: 0.0%. Sicherheitsfaktor: ∞ (keine Last).")
     else:
         st.success(f"✅ **NACHWEIS ERFÜLLT.** Ausnutzung: {utilization:.1f}%. Sicherheitsfaktor: {(100 / utilization):.2f}")
@@ -154,16 +154,16 @@ col_hs1, col_hs2 = st.columns([3, 2])
 
 with col_hs1:
     st.markdown("""
-    Bei komplexen Schweißknoten versagt die klassische Nennspannungskonzept. Das Hot-Spot Modul automatisiert die:
+    Bei komplexen Schweißknoten versagt das klassische Nennspannungskonzept. Das Hot-Spot Modul automatisiert die:
     1. **Knoten-Extraktion:** Einlesen von FEM-Spannungen an Referenzpunkten (0.4t / 1.0t).
     2. **Extrapolation:** Lineare oder quadratische Extrapolation zur Schweißnahtzehe.
     3. **Lebensdauer:** Schadensakkumulation nach Palmgren-Miner basierend auf FAT-Klassen.
     """)
     
     # Mock-up plot for Extrapolation
-    x_hs = np.array([0.4, 0.7, 1.0])
-    y_hs = np.array([210, 185, 160]) # Stress values
-    # Extrapolate to 0.0
+    x_hs = np.array([0.4, 1.0])
+    y_hs = np.array([210, 160])  # Stress at IIW reference points (0.4t, 1.0t)
+    # Linear extrapolation to weld toe (IIW-conform, 2-point method)
     p = np.polyfit(x_hs, y_hs, 1)
     x_ext = np.linspace(0, 1.2, 50)
     y_ext = np.polyval(p, x_ext)

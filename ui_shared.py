@@ -34,6 +34,8 @@ def apply_styles() -> None:
     st.markdown(
         """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=JetBrains+Mono&display=swap');
+
         .stApp {
             background-color: #0d1117;
             background-image:
@@ -41,8 +43,6 @@ def apply_styles() -> None:
                 linear-gradient(90deg, rgba(108, 175, 43, 0.05) 1px, transparent 1px);
             background-size: 50px 50px;
         }
-
-        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&family=JetBrains+Mono&display=swap');
 
         html, body {
             font-family: 'Space Grotesk', sans-serif !important;
@@ -123,10 +123,8 @@ def apply_styles() -> None:
 
 
 def render_header() -> None:
-    col_logo, col_title = st.columns([1, 4])
-    with col_title:
-        st.title("Python und KI Automatisierung für Unternehmen")
-        st.markdown("*Showcase: KI-Workflows, Engineering-Analytik und Prozessautomatisierung*")
+    st.title("Python und KI Automatisierung für Unternehmen")
+    st.markdown("*Showcase: KI-Workflows, Engineering-Analytik und Prozessautomatisierung*")
     st.divider()
 
 

@@ -57,9 +57,9 @@ pipe_steps = [
 for col, (title, desc, is_final) in zip(pipe_cols, pipe_steps):
     with col:
         if is_final:
-            st.success(f"**{title}**\\n{desc}")
+            st.success(f"**{title}**\n{desc}")
         else:
-            st.info(f"**{title}**\\n{desc}")
+            st.info(f"**{title}**\n{desc}")
 
 # -- Lead Detail Example Card --
 st.write("📝 **Example: AI-Enriched Lead Detail**")
