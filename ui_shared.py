@@ -154,6 +154,7 @@ def render_sidebar() -> None:
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🌐 NETWORK")
     st.sidebar.markdown("🔗 **[LinkedIn Profile](https://www.linkedin.com/in/dominik-f-840ab919a/)**")
+    st.sidebar.markdown("🔗 **[GitHub Profile](https://github.com/swDomass)**")
     st.sidebar.markdown("🔗 **[Linked Engineering (Konstruktion & Simulation)](https://www.linked-engineering.com)**")
     st.sidebar.markdown("---")
     st.sidebar.caption("🔒 Alle Kennzahlen und Ausgaben sind simulierte bzw. anonymisierte Beispieldaten (NDA).")
